@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce App</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            padding: 20px;
+        }
+
+        .products {
+            width: 70%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .product {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .product img {
+            width: 50%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+
+        button {
+            background: green;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .cart {
+            width: 30%;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-left: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .checkout {
+            background: blue;
+            margin-top: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>My E-Commerce Store</h1>
+</header>
+
+<div class="container">
+
+    <!-- Products -->
+    <div class="products" id="productList"></div>
+
+    <!-- Cart -->
+    <div class="cart">
+        <h2>Cart</h2>
+        <div id="cartItems"></div>
+        <div class="total">Total: ₹<span id="total">0</span></div>
+        <button class="checkout" onclick="checkout()">Checkout</button>
+    </div>
+
+</div>
+
+<script>
+    const products = [
+        { id: 1, name: "Phone", price: 15000, image: "https://darlingretail.com/cdn/shop/files/iPhone_15_Pink_Pure_Back_iPhone_15_Pink_Pure_Front_2up_Screen__WWEN_cfd96ace-df87-4ab3-a96a-e8e9b13bb7b9_800x.jpg?v=1695104022https://darlingretail.com/cdn/shop/files/iPhone_15_Pink_Pure_Back_iPhone_15_Pink_Pure_Front_2up_Screen__WWEN_cfd96ace-df87-4ab3-a96a-e8e9b13bb7b9_800x.jpg?v=1695104022"},
+ { id: 2, name: "Laptop", price: 50000, image: "https://cdn-dynmedia-1.microsoft.com/is/image/microsoftcorp/13-laptop-platinum-right-render-fy25:VP4-1260x795?fmt=png-alpha" },
+        { id: 3, name: "Headphones", price: 2000, image: "https://plus.unsplash.com/premium_photo-1678099940967-73fe30680949?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8d2lyZWxlc3MlMjBoZWFkcGhvbmVzfGVufDB8fDB8fHww" },
+        { id: 4, name: "Watch", price: 3000, image: "https://www.sonatawatches.in/dw/image/v2/BKDD_PRD/on/demandware.static/-/Sites-titan-master-catalog/default/dw7b993993/images/Sonata/Catalog/7152QM01_1.jpg?sw=600&sh=600" },
+        { id: 5, name: "Shoes", price: 2500, image: "https://png.pngtree.com/png-vector/20241018/ourmid/pngtree-running-shoes-or-sneakers-on-a-transparent-background-png-image_14112954.png" },
+        { id: 6, name: "Bag", price: 1500, image: "https://static.vecteezy.com/system/resources/thumbnails/046/829/929/small/yellow-school-bag-isolated-on-transparent-background-png.png" }
+    ];
+
+    let cart = [];
+
+    function displayProducts() {
+        const productList = document.getElementById("productList");
+        productList.innerHTML = "";
+
+        products.forEach(product => {
+            productList.innerHTML += `
+                <div class="product">
+                    <img src="${product.image}">
+                    <h3>${product.name}</h3>
+                    <p>₹${product.price}</p>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                </div>
+            `;
+        });
+    }
+
+    function addToCart(id) {
+        const item = products.find(p => p.id === id);
+        cart.push(item);
+        updateCart();
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    function updateCart() {
+        const cartItems = document.getElementById("cartItems");
+        const totalEl = document.getElementById("total");
+
+        cartItems.innerHTML = "";
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            total += item.price;
+
+            cartItems.innerHTML += `
+                <div class="cart-item">
+                    <span>${item.name}</span>
+                    <span>₹${item.price}</span>
+                    <button onclick="removeFromCart(${index})">X</button>
+                </div>
+            `;
+        });
+
+        totalEl.innerText = total;
+    }
+
+    function checkout() {
+        if (cart.length === 0) {
+            alert("Cart is empty!");
+        } else {
+            alert("Order placed successfully!");
+            cart = [];
+            updateCart();
+        }
+    }
+
+    displayProducts();
+</script>
+
+</body>
+</html>
